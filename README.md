@@ -1,5 +1,7 @@
 # url-relation [![NPM Version][npm-image]][npm-url] ![File Size][filesize-image] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][david-image]][david-url]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/stevenvachon/url-relation.svg)](https://greenkeeper.io/)
+
 > Determine the relation between two URLs.
 
 
