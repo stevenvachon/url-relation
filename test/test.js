@@ -1,29 +1,28 @@
 "use strict";
-const expect = require("chai").expect;
+const customizeURL = require("incomplete-url");
+const {describe, it} = require("mocha");
+const {expect} = require("chai");
 const tests = require("./helpers/tests.json");
-const universalURL = require("universal-url");
-const urlRelation = require("../lib/url-relation");
-
-const it_searchParamsOnly = universalURL.supportsSearchParams ? it : it.skip;
-const URL = universalURL.URL;
+const {URL} = require("universal-url");
+const urlRelation = require("../");
 
 
 
 function combinations(options, type)
 {
-	const _it = type==="trusted_deep" ? it_searchParamsOnly : it;
+	const _URL = type==="trusted_deep" ? URL : customizeURL({ noSearchParams:true }).IncompleteURL;
 	//let skipped = 0;
 
-	_it(`supports ${tests.length} different url combinations`, function()
+	it(`supports ${tests.length} different url combinations`, function()
 	{
-		this.timeout(3000);  // for the shim
+		this.timeout(7500);  // for the shim
 
 		for (let i=0; i<tests.length; i++)
 		{
 			//if (tests[i].relation[type] === null) { skipped++; continue }
 
-			const url1 = new URL( tests[i].url1 );
-			const url2 = new URL( tests[i].url2 );
+			const url1 = new _URL( tests[i].url1 );
+			const url2 = new _URL( tests[i].url2 );
 			expect( urlRelation(url1,url2,options) ).to.equal( urlRelation[ tests[i].relation[type] ] );
 			expect( urlRelation(url2,url1,options) ).to.equal( urlRelation[ tests[i].relation[type] ] );
 		}
@@ -42,9 +41,9 @@ function httpOnly(url1, url2)
 
 
 
-function options(/*...overrides*/)
+function options(...overrides)
 {
-	const resetOptions = 
+	const resetOptions =
 	{
 		defaultPorts: {},
 		directoryIndexes: [],
@@ -58,13 +57,8 @@ function options(/*...overrides*/)
 		queryNames: []
 	};
 
-	// TODO :: use this when dropping Node v4 support
-	//if (overrides == null) return resetOptions;
-	//return Object.assign(resetOptions, ...overrides);
-
-	const overrides = Array.from(arguments);
-	if (overrides.length === 0) return resetOptions;
-	return Object.assign.apply(undefined, [resetOptions].concat(overrides));
+	if (overrides == null) return resetOptions;
+	return Object.assign(resetOptions, ...overrides);
 }
 
 
@@ -249,7 +243,7 @@ describe("options", function()
 		expect( urlRelation(url1,url2,opts) ).to.equal(urlRelation.AUTH);
 		expect( urlRelation(url2,url1,opts) ).to.equal(urlRelation.AUTH);
 	});
-	
+
 
 
 	it("ignoreEmptyDirectoryNames = true", function()
@@ -308,7 +302,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreEmptyQueries = true", function()
+	it("ignoreEmptyQueries = true", function()
 	{
 		const opts = options({ ignoreEmptyQueries:true });
 		let url1,url2;
@@ -331,7 +325,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreEmptyQueries = function", function()
+	it("ignoreEmptyQueries = function", function()
 	{
 		const opts = options({ ignoreEmptyQueries:httpOnly });
 		let url1,url2;
@@ -373,7 +367,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreQueryNames = true", function()
+	it("ignoreQueryNames = true", function()
 	{
 		let opts,url1,url2;
 
@@ -392,7 +386,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreQueryNames = function", function()
+	it("ignoreQueryNames = function", function()
 	{
 		const opts = options({ ignoreQueryNames:httpOnly, queryNames:["var"] });
 		let url1,url2;
@@ -422,7 +416,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreQueryOrder = true", function()
+	it("ignoreQueryOrder = true", function()
 	{
 		const opts = options({ ignoreQueryOrder:true });
 		let url1,url2;
@@ -445,7 +439,7 @@ describe("options", function()
 
 
 
-	it_searchParamsOnly("ignoreQueryOrder = function", function()
+	it("ignoreQueryOrder = function", function()
 	{
 		const opts = options({ ignoreQueryOrder:httpOnly });
 		let url1,url2;
@@ -555,7 +549,7 @@ describe("options", function()
 
 
 
-		it_searchParamsOnly("supports edge cases", function()
+		it("supports edge cases", function()
 		{
 			const opts = urlRelation.COMMON_PROFILE;
 			let url1,url2;

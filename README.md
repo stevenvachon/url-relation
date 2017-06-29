@@ -1,11 +1,11 @@
-# url-relation [![NPM Version][npm-image]][npm-url] ![File Size][filesize-image] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Status][david-image]][david-url]
+# url-relation [![NPM Version][npm-image]][npm-url] ![File Size][filesize-image] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Monitor][greenkeeper-image]][greenkeeper-url]
 
 > Determine the relation between two URLs.
 
 
 ## Installation
 
-[Node.js](http://nodejs.org/) `>= 4` is required. To install, type this at the command line:
+[Node.js](http://nodejs.org/) `>= 6` is required. To install, type this at the command line:
 ```shell
 npm install url-relation
 ```
@@ -176,5 +176,5 @@ Due to extreme file size in correctly parsing domains, browser builds will not i
 [travis-url]: https://travis-ci.org/stevenvachon/url-relation
 [coveralls-image]: https://img.shields.io/coveralls/stevenvachon/url-relation.svg
 [coveralls-url]: https://coveralls.io/github/stevenvachon/url-relation
-[david-image]: https://img.shields.io/david/stevenvachon/url-relation.svg
-[david-url]: https://david-dm.org/stevenvachon/url-relation
+[greenkeeper-image]: https://badges.greenkeeper.io/stevenvachon/url-relation.svg
+[greenkeeper-url]: https://greenkeeper.io/

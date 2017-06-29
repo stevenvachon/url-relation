@@ -13,7 +13,7 @@ const encodedSpace = /%20/g;
 const multipleSlashes = /\/{2,}/g;
 const queryNames = [];
 
-const level = 
+const level =
 {
 	NONE:      -1,
 	PROTOCOL:  0,
@@ -35,7 +35,7 @@ const level =
 	ALL:       16
 };
 
-const carefulProfile = 
+const carefulProfile =
 {
 	defaultPorts,
 	directoryIndexes,
@@ -49,7 +49,7 @@ const carefulProfile =
 	queryNames
 };
 
-const commonProfile = 
+const commonProfile =
 {
 	defaultPorts,
 	directoryIndexes,
@@ -116,13 +116,13 @@ function hostnameRelation(url1, url2, options)
 
 		if (hostname1_stripped === hostname2_stripped) return;
 	}
-	
+
 	const hostname1 = parseDomain(url1.hostname);
 	const hostname2 = parseDomain(url2.hostname);
-	
+
 	// If unknown top-level domain or running in a browser
 	if (hostname1===null || hostname2===null) return level.PROTOCOL;
-	
+
 	if (hostname1.tld !== hostname2.tld) return level.PROTOCOL;
 	if (hostname1.domain !== hostname2.domain) return level.TLD;
 	if (hostname1.subdomain !== hostname2.subdomain) return level.DOMAIN;
@@ -159,9 +159,9 @@ function pathnameRelation(url1, url2, options)
 
 	pathname1 = pathname1.split("/");
 	pathname2 = pathname2.split("/");
-	
+
 	if (pathname1.length !== pathname2.length) return level.AUTH;
-	
+
 	for (let i=0; i<pathname1.length; i++)
 	{
 		if (pathname1[i] !== pathname2[i])
@@ -178,10 +178,10 @@ function pathnameRelation(url1, url2, options)
 					if (pathname1[i]==="" && anyMatch(pathname2[i], directoryIndexes)) return;
 					if (pathname2[i]==="" && anyMatch(pathname1[i], directoryIndexes)) return;
 				}
-				
+
 				return level.DIRECTORY;
 			}
-			
+
 			// Not same dir
 			return level.AUTH;
 		}
@@ -251,7 +251,7 @@ function searchRelation(url1, url2, options)
 	}
 
 	if (params1.length !== params2.length) return level.PATHNAME;
-	
+
 	if (ignoreQueryOrder)
 	{
 		params1 = params1.sort(matchingParamName);
@@ -275,7 +275,7 @@ function urlRelation(url1, url2, options)
 	}
 
 	if (url1.protocol !== url2.protocol) return level.NONE;
-	
+
 	const unrelatedHostname = hostnameRelation(url1, url2, options);
 	if (unrelatedHostname !== undefined) return unrelatedHostname;
 
@@ -284,15 +284,15 @@ function urlRelation(url1, url2, options)
 
 	if (url1.username !== url2.username) return level.HOST;
 	if (url1.password !== url2.password) return level.USERNAME;
-	
+
 	const unrelatedPathname = pathnameRelation(url1, url2, options);
 	if (unrelatedPathname !== undefined) return unrelatedPathname;
-	
+
 	const unrelatedSearch = searchRelation(url1, url2, options);
 	if (unrelatedSearch !== undefined) return unrelatedSearch;
-	
+
 	if (url1.hash !== url2.hash) return level.PATH;
-	
+
 	return level.ALL;
 }
 
