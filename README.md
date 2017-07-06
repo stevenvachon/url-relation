@@ -26,7 +26,7 @@ const relation = urlRelation(url1, url2, options);
 //-> 14
 
 if (relation >= urlRelation.HOST) {
-  console.log('same server!');
+  // same host
 }
 ```
 
@@ -51,7 +51,7 @@ When set to `true` or a function that returns `true`, a URL's port that matches 
 
 ### `ignoreDirectoryIndex`
 Type: `Boolean` or `Function`  
-Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/src/url-relation.js#L84-L87)  
+Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/index.js#L34)  
 When set to `true` or a function that returns `true`, a URL's file name that matches any found in [`directoryIndexes`](#directoryindexes) will be ignored during comparison.
 
 ### `ignoreEmptyDirectoryNames`
@@ -61,22 +61,22 @@ When set to `true` or a function that returns `true`, empty directory names with
 
 ### `ignoreEmptyQueries`
 Type: `Boolean` or `Function`  
-Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/src/url-relation.js#L98-L104)  
-When set to `true` or a function that returns `true`, a URL's empty query parameters (such as "?=") will not distinguish one URL from another. **This option will be silently skipped** if the input `URL`s do not support `URLSearchParams`.
+Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/index.js#L40-L46)  
+When set to `true` or a function that returns `true`, a URL's empty query parameters (such as "?=") will be ignored during comparison. **This option will be silently skipped** if the input `URL`s do not support `URLSearchParams`.
 
 ### `ignoreQueryNames`
 Type: `Boolean` or `Function`  
 Default value: `false`  
-When set to `true` or a function that returns `true`, a URL's query parameters matching [`queryNames`](#querynames) will not distinguish one URL from another. **This option will be silently skipped** if the input `URL`s do not support `URLSearchParams`.
+When set to `true` or a function that returns `true`, a URL's query parameters matching [`queryNames`](#querynames) will be ignored during comparison. **This option will be silently skipped** if the input `URL`s do not support `URLSearchParams`.
 
 ### `ignoreQueryOrder`
 Type: `Boolean` or `Function`  
-Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/src/url-relation.js#L98-L104)  
+Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/index.js#L40-46)  
 When set to `true` or a function that returns `true`, the order of *unique* query parameters will not distinguish one URL from another. **This option will be silently skipped** if the input `URL`s do not support `URLSearchParams`.
 
 ### `ignoreWWW`
 Type: `Boolean` or `Function`  
-Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/src/url-relation.js#L84-L87)  
+Default value: [`Function`](https://github.com/stevenvachon/url-relation/blob/master/index.js#L34)  
 When set to `true` or a function that returns `true`, a URL's "www" subdomain will be ignored during comparison.
 
 ### `queryNames`
@@ -90,7 +90,7 @@ A list of query parameters for [`ignoreQueryNames`](#ignorequerynames).
 When an option is defined as a `Function`, it must return `true` to be included in the custom filter:
 ```js
 const options = {
-  ignoreDirectoryIndex: function(url1, url2) {
+  ignoreDirectoryIndex: (url1, url2) => {
     // Only URLs with these protocols will have their directory indexes ignored
     return url1.protocol === 'http:' && url1.protocol === 'https:';
   }
@@ -112,7 +112,7 @@ const url2 = new URL('http://domain.com/#hash');
 const trustedHosts = ['domain.com'];
 
 const isTrusted = trustedHosts
-  .reduce(function(results, trustedHost) {
+  .reduce((results, trustedHost) => {
     results[0] = results[0] || url1.hostname.endsWith(trustedHost);
     results[1] = results[1] || url2.hostname.endsWith(trustedHost);
     return results;
@@ -128,7 +128,10 @@ urlRelation(url1, url2, options);
 #### Customizing Profiles
 
 ```js
-const custom = Object.assign({}, urlRelation.CAREFUL_PROFILE, { ignoreTrailingSlash:true });
+const custom = {
+  ...urlRelation.CAREFUL_PROFILE,
+  ignoreTrailingSlash: true
+};
 ```
 Or:
 ```js
@@ -140,10 +143,10 @@ const custom = extend(true, {}, urlRelation.COMMON_PROFILE, { directoryIndexes:[
 
 ## Relation Constants
 
-Returned values can be compared with: `NONE`, `PROTOCOL`, `TLD`, `DOMAIN`, `SUBDOMAIN`, `HOSTNAME`, `PORT`, `HOST`, `USERNAME`, `PASSWORD`, `AUTH`, `DIRECTORY`, `FILENAME`, `PATHNAME`, `SEARCH`, `PATH`, `HASH`, `ALL`.
+In sequential order, returned values can be compared with: `NONE`, `PROTOCOL`, `TLD`, `DOMAIN`, `SUBDOMAIN`, `HOSTNAME`, `PORT`, `HOST`, `USERNAME`, `PASSWORD`, `AUTH`, `DIRECTORY`, `FILENAME`, `PATHNAME`, `SEARCH`, `PATH`, `HASH`, `ALL`.
 
 ```
-               AUTH                 HOST                         PATH
+               AUTH                  HOST                        PATH
               __|__                ___|___                 _______|______
              /     \              /       \               /              \
         USERNAME PASSWORD     HOSTNAME    PORT        PATHNAME        SEARCH  HASH
@@ -159,7 +162,7 @@ PROTOCOL               SUBDOMAIN |    TLD      DIRECTORY   FILENAME
 
 **Note:** there are a few breaks in the linearity of these values:
 
-* `AUTH` is prioritized *after* `HOST` because matching authentication on a different domain is pointless.
+* `AUTH` is prioritized *after* `HOST` because matching authentication on a different host is pointless.
 * `TLD` is prioritized *before* `DOMAIN` because matching a domain on a different top-level domain is pointless.
 * `SUBDOMAIN` is prioritized *after* `DOMAIN`.
 
@@ -171,7 +174,7 @@ Due to extreme file size in correctly parsing domains, browser builds will not i
 
 [npm-image]: https://img.shields.io/npm/v/url-relation.svg
 [npm-url]: https://npmjs.org/package/url-relation
-[filesize-image]: https://img.shields.io/badge/size-2.3kB%20gzipped-blue.svg
+[filesize-image]: https://img.shields.io/badge/size-2.4kB%20gzipped-blue.svg
 [travis-image]: https://img.shields.io/travis/stevenvachon/url-relation.svg
 [travis-url]: https://travis-ci.org/stevenvachon/url-relation
 [coveralls-image]: https://img.shields.io/coveralls/stevenvachon/url-relation.svg

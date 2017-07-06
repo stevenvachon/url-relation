@@ -1,7 +1,7 @@
 "use strict";
-const writeFileSync = require("fs").writeFileSync;
+const {writeFileSync} = require("fs");
 
-const urls = 
+const urls =
 [
 	// Parts removing from right to left
 	"http://user:pass@www.domain.com:80/test//tes.ter/./../index.html?va r1= +dir&var2=text&var3#anchor",
@@ -84,17 +84,14 @@ const urls =
 
 
 
-function generate()
-{
-	saveFile(`${__dirname}/tests.json`);
-}
+const generate = () => saveFile(`${__dirname}/tests.json`);
 
 
 
-function generateData()
+const generateData = () =>
 {
 	const output = [];
-	
+
 	for (let i=0; i<urls.length; i++)
 	{
 		for (let j=0; j<urls.length; j++)
@@ -113,26 +110,23 @@ function generateData()
 			});
 		}
 	}
-	
+
 	return output;
-}
+};
 
 
 
-function generateString()
-{
-	// Extra line break for unix/git
-	return JSON.stringify(generateData(), null, "\t") + "\n";
-}
+// Extra line break for unix/git
+const generateString = () => JSON.stringify(generateData(), null, "\t") + "\n";
 
 
 
-function saveFile(location)
+const saveFile = location =>
 {
 	writeFileSync(location, generateString());
-	
+
 	console.log(`Written to: ${location}`);
-}
+};
 
 
 

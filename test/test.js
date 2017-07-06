@@ -8,7 +8,7 @@ const urlRelation = require("../");
 
 
 
-function combinations(options, type)
+const combinations = (options, type) =>
 {
 	const _URL = type==="trusted_deep" ? URL : customizeURL({ noSearchParams:true }).IncompleteURL;
 	//let skipped = 0;
@@ -29,21 +29,16 @@ function combinations(options, type)
 
 		//if (skipped > 0) console.log(`${skipped} skipped`);
 	});
-}
+};
 
 
 
-function httpOnly(url1, url2)
-{
-	return (url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:");
-}
+const httpOnly = (url1, url2) => [url1,url2].every(url => ["http:","https:"].includes(url.protocol));
 
 
 
-
-function options(...overrides)
-{
-	const resetOptions =
+const options = (...overrides) => Object.assign
+(
 	{
 		defaultPorts: {},
 		directoryIndexes: [],
@@ -55,11 +50,9 @@ function options(...overrides)
 		ignoreQueryOrder: false,
 		ignoreWWW: false,
 		queryNames: []
-	};
-
-	if (overrides == null) return resetOptions;
-	return Object.assign(resetOptions, ...overrides);
-}
+	},
+	...overrides
+);
 
 
 
@@ -71,6 +64,7 @@ it(`has "careful" options profile publicly available`, function()
 
 	expect(() => urlRelation.CAREFUL_PROFILE = "changed").to.throw(Error);
 	expect(() => urlRelation.CAREFUL_PROFILE.defaultPorts = "changed").to.throw(Error);
+	expect(() => urlRelation.CAREFUL_PROFILE.directoryIndexes.push('changed.html')).to.throw(Error);
 	expect(urlRelation.CAREFUL_PROFILE).to.equal(originalValue);
 });
 
@@ -84,6 +78,7 @@ it(`has "common" options profile publicly available`, function()
 
 	expect(() => urlRelation.COMMON_PROFILE = "changed").to.throw(Error);
 	expect(() => urlRelation.COMMON_PROFILE.defaultPorts = "changed").to.throw(Error);
+	expect(() => urlRelation.COMMON_PROFILE.directoryIndexes.push('changed.html')).to.throw(Error);
 	expect(urlRelation.COMMON_PROFILE).to.equal(originalValue);
 });
 
