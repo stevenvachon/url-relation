@@ -26,7 +26,7 @@ const relation = urlRelation(url1, url2, options);
 //-> 14
 
 if (relation >= urlRelation.HOST) {
-  console.log('same server!');
+  // same host
 }
 ```
 
@@ -159,7 +159,7 @@ PROTOCOL               SUBDOMAIN |    TLD      DIRECTORY   FILENAME
 
 **Note:** there are a few breaks in the linearity of these values:
 
-* `AUTH` is prioritized *after* `HOST` because matching authentication on a different domain is pointless.
+* `AUTH` is prioritized *after* `HOST` because matching authentication on a different host is pointless.
 * `TLD` is prioritized *before* `DOMAIN` because matching a domain on a different top-level domain is pointless.
 * `SUBDOMAIN` is prioritized *after* `DOMAIN`.
 

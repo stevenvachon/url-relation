@@ -1,11 +1,11 @@
 {
   "name": "url-relation",
   "description": "Determine the relation between two URLs.",
-  "version": "1.0.0-alpha10",
+  "version": "1.0.0-alpha11",
   "license": "MIT",
   "author": "Steven Vachon <contact@svachon.com> (https://www.svachon.com/)",
   "browser": {
-    "parse-domain": "./lib/parse-domain"
+    "parse-domain": "./shims/parse-domain"
   },
   "repository": "stevenvachon/url-relation",
   "dependencies": {
@@ -24,11 +24,11 @@
     "chai": "^4.0.2",
     "coveralls": "^2.13.1",
     "gzip-size-cli": "^2.0.0",
-    "incomplete-url": "^1.0.0",
+    "incomplete-url": "^1.0.2",
     "mocha": "^3.4.2",
     "npm-watch": "~0.2.0",
     "nyc": "^11.0.3",
-    "uglify-js": "^3.0.22",
+    "uglify-js": "^3.0.23",
     "universal-url": "^1.0.0"
   },
   "engines": {
@@ -50,8 +50,8 @@
     }
   },
   "files": [
-    "lib/parse-domain.js",
-    "lib/url-relation.js"
+    "index.js",
+    "shims/parse-domain.js"
   ],
   "keywords": [
     "uri",

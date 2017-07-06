@@ -13,27 +13,44 @@ const encodedSpace = /%20/g;
 const multipleSlashes = /\/{2,}/g;
 const queryNames = [];
 
-const level =
+
+
+const defaultValue = (customOptions, optionName, ...args) =>
 {
-	NONE:      -1,
-	PROTOCOL:  0,
-	TLD:       1,
-	DOMAIN:    2,
-	SUBDOMAIN: 3,
-	HOSTNAME:  4,
-	PORT:      5,
-	HOST:      6,
-	USERNAME:  7,
-	PASSWORD:  8,
-	AUTH:      9,
-	DIRECTORY: 10,
-	FILENAME:  11,
-	PATHNAME:  12,
-	SEARCH:    13,
-	PATH:      14,
-	HASH:      15,
-	ALL:       16
+	const defaultOption = evaluateValue(commonProfile[optionName], ...args);
+
+	if (customOptions != null)
+	{
+		return defined( evaluateValue(customOptions[optionName], ...args), defaultOption );
+	}
+	else
+	{
+		return defaultOption;
+	}
 };
+
+
+
+const filterCommon = (url1, url2) =>
+{
+	return (url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:");
+};
+
+
+
+const filterSafe = (url1, url2) => url1.protocol==="mailto:" && url2.protocol==="mailto:";
+
+
+
+const filterSpecCompliant = (url1, url2) =>
+{
+	if (filterSafe(url1,url2)) return true;
+	if ((url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:")) return true;
+	if ((url1.protocol==="ws:"   || url1.protocol==="wss:")   && (url2.protocol==="ws:"   || url2.protocol==="wss:"))   return true;
+	return false;
+};
+
+
 
 const carefulProfile =
 {
@@ -65,47 +82,31 @@ const commonProfile =
 
 
 
-function defaultValue(customOptions, optionName, ...args)
+const level =
 {
-	const defaultOption = evaluateValue(commonProfile[optionName], ...args);
-
-	if (customOptions != null)
-	{
-		return defined( evaluateValue(customOptions[optionName], ...args), defaultOption );
-	}
-	else
-	{
-		return defaultOption;
-	}
-}
-
-
-
-function filterCommon(url1, url2)
-{
-	return (url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:");
-}
-
-
-
-function filterSafe(url1, url2)
-{
-	return url1.protocol==="mailto:" && url2.protocol==="mailto:";
-}
+	NONE:      -1,
+	PROTOCOL:  0,
+	TLD:       1,
+	DOMAIN:    2,
+	SUBDOMAIN: 3,
+	HOSTNAME:  4,
+	PORT:      5,
+	HOST:      6,
+	USERNAME:  7,
+	PASSWORD:  8,
+	AUTH:      9,
+	DIRECTORY: 10,
+	FILENAME:  11,
+	PATHNAME:  12,
+	SEARCH:    13,
+	PATH:      14,
+	HASH:      15,
+	ALL:       16
+};
 
 
 
-function filterSpecCompliant(url1, url2)
-{
-	if (filterSafe(url1,url2)) return true;
-	if ((url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:")) return true;
-	if ((url1.protocol==="ws:"   || url1.protocol==="wss:")   && (url2.protocol==="ws:"   || url2.protocol==="wss:"))   return true;
-	return false;
-}
-
-
-
-function hostnameRelation(url1, url2, options)
+const hostnameRelation = (url1, url2, options) =>
 {
 	if (url1.hostname === url2.hostname) return;
 
@@ -126,25 +127,17 @@ function hostnameRelation(url1, url2, options)
 	if (hostname1.tld !== hostname2.tld) return level.PROTOCOL;
 	if (hostname1.domain !== hostname2.domain) return level.TLD;
 	if (hostname1.subdomain !== hostname2.subdomain) return level.DOMAIN;
-}
+};
 
 
 
-function matchingParamName(a, b)
-{
-	return a[0].localeCompare( b[0] );
-}
+const matchingParamName = (a, b) => a[0].localeCompare( b[0] );
+
+const notEmptyParam = param => param[0]!=="" || param[1]!=="";
 
 
 
-function notEmptyParam(param)
-{
-	return param[0]!=="" || param[1]!=="";
-}
-
-
-
-function pathnameRelation(url1, url2, options)
+const pathnameRelation = (url1, url2, options) =>
 {
 	if (url1.pathname === url2.pathname) return;
 
@@ -186,11 +179,11 @@ function pathnameRelation(url1, url2, options)
 			return level.AUTH;
 		}
 	}
-}
+};
 
 
 
-function portRelation(url1, url2, options)
+const portRelation = (url1, url2, options) =>
 {
 	if (url1.port === url2.port) return;
 
@@ -204,11 +197,11 @@ function portRelation(url1, url2, options)
 	}
 
 	return level.HOSTNAME;
-}
+};
 
 
 
-function searchRelation(url1, url2, options)
+const searchRelation = (url1, url2, options) =>
 {
 	if (url1.search === url2.search) return;
 
@@ -241,10 +234,7 @@ function searchRelation(url1, url2, options)
 	{
 		const queryNames = defaultValue(options, "queryNames");
 
-		const notIgnoredName = function(param)
-		{
-			return !anyMatch(param[0], queryNames);
-		};
+		const notIgnoredName = param => !anyMatch(param[0], queryNames);
 
 		params1 = params1.filter(notIgnoredName);
 		params2 = params2.filter(notIgnoredName);
@@ -263,11 +253,11 @@ function searchRelation(url1, url2, options)
 		if (params1[i][0] !== params2[i][0]) return level.PATHNAME;
 		if (params1[i][1] !== params2[i][1]) return level.PATHNAME;
 	}
-}
+};
 
 
 
-function urlRelation(url1, url2, options)
+const urlRelation = (url1, url2, options) =>
 {
 	if (!isURL.lenient(url1) || !isURL.lenient(url2))
 	{
@@ -294,7 +284,7 @@ function urlRelation(url1, url2, options)
 	if (url1.hash !== url2.hash) return level.PATH;
 
 	return level.ALL;
-}
+};
 
 
 

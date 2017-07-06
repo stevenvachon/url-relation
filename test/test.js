@@ -8,7 +8,7 @@ const urlRelation = require("../");
 
 
 
-function combinations(options, type)
+const combinations = (options, type) =>
 {
 	const _URL = type==="trusted_deep" ? URL : customizeURL({ noSearchParams:true }).IncompleteURL;
 	//let skipped = 0;
@@ -29,21 +29,20 @@ function combinations(options, type)
 
 		//if (skipped > 0) console.log(`${skipped} skipped`);
 	});
-}
+};
 
 
 
-function httpOnly(url1, url2)
+const httpOnly = (url1, url2) =>
 {
 	return (url1.protocol==="http:" || url1.protocol==="https:") && (url2.protocol==="http:" || url2.protocol==="https:");
-}
+};
 
 
 
 
-function options(...overrides)
-{
-	const resetOptions =
+const options = (...overrides) => Object.assign
+(
 	{
 		defaultPorts: {},
 		directoryIndexes: [],
@@ -55,11 +54,9 @@ function options(...overrides)
 		ignoreQueryOrder: false,
 		ignoreWWW: false,
 		queryNames: []
-	};
-
-	if (overrides == null) return resetOptions;
-	return Object.assign(resetOptions, ...overrides);
-}
+	},
+	...overrides
+);
 
 
 
