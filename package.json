@@ -9,7 +9,7 @@
   },
   "repository": "stevenvachon/url-relation",
   "dependencies": {
-    "any-match": "^1.0.1",
+    "any-match": "^2.0.0",
     "deep-freeze-node": "^1.1.2",
     "defined": "^1.0.0",
     "evaluate-value": "^1.0.2",
