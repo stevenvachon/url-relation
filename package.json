@@ -29,7 +29,7 @@
     "npm-watch": "~0.2.0",
     "nyc": "^11.0.3",
     "uglify-js": "^3.0.23",
-    "universal-url": "^1.0.0"
+    "universal-url": "^2.0.0"
   },
   "engines": {
     "node": ">= 6"
