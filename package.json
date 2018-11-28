@@ -13,7 +13,7 @@
     "deep-freeze-node": "^1.1.2",
     "defined": "^1.0.0",
     "evaluate-value": "^1.0.2",
-    "isurl": "^1.0.0",
+    "isurl": "^2.0.0",
     "parse-domain": "^1.1.0",
     "strip-www": "^1.0.0"
   },
