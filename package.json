@@ -1,60 +1,68 @@
 {
   "name": "url-relation",
   "description": "Determine the relation between two URLs.",
-  "version": "1.0.0-alpha11",
+  "version": "1.0.0-alpha12",
   "license": "MIT",
-  "author": "Steven Vachon <contact@svachon.com> (https://www.svachon.com/)",
+  "author": "Steven Vachon <contact@svachon.com> (https://svachon.com)",
+  "repository": "github:stevenvachon/url-relation",
+  "main": "lib",
   "browser": {
+    "./lib": "./lib-es5",
     "parse-domain": "./shims/parse-domain"
   },
-  "repository": "stevenvachon/url-relation",
   "dependencies": {
     "any-match": "^2.0.0",
+    "array.prototype.flat": "^1.2.1",
     "deep-freeze-node": "^1.1.3",
     "defined": "^1.0.0",
-    "evaluate-value": "^1.0.2",
-    "isurl": "^2.0.0",
+    "evaluate-value": "^2.0.0",
+    "isurl": "^4.0.1",
     "parse-domain": "^2.1.7",
-    "strip-www": "^1.0.0"
+    "symbol.prototype.description": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.2",
+    "coveralls": "^3.0.3",
     "gzip-size-cli": "^3.0.0",
-    "incomplete-url": "^2.0.0",
-    "mocha": "^5.2.0",
-    "npm-watch": "~0.5.0",
-    "nyc": "^13.1.0",
-    "terser": "^3.10.12",
+    "incomplete-url": "^4.0.0",
+    "mocha": "^6.1.4",
+    "npm-watch": "~0.6.0",
+    "nyc": "^14.0.0",
+    "terser": "^3.17.0",
     "universal-url": "^2.0.0"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 8"
   },
   "scripts": {
     "ci": "npm run test && nyc report --reporter=text-lcov | coveralls",
-    "posttest": "nyc report --reporter=html && browserify index.js --global-transform [ babelify --presets [ @babel/env ] ] --standalone urlRelation | terser --compress --mangle | gzip-size",
-    "test": "nyc --reporter=text-summary mocha test/ --check-leaks --bail",
+    "posttest": "nyc report --reporter=text-summary --reporter=html && browserify lib --global-transform [ babelify --presets [ @babel/env ] ] --standalone=URLRelation | terser --compress --mangle | gzip-size",
+    "prepublishOnly": "npm test && babel lib/ --out-dir=lib-es5/ --presets=@babel/env --source-maps",
+    "test": "nyc --silent mocha test/ --check-leaks --bail",
     "watch": "npm-watch test"
   },
   "watch": {
     "test": {
       "inherit": true,
       "patterns": [
-        "index.js",
-        "test/**/*.{js,json}"
+        "lib",
+        "shims",
+        "test"
       ]
     }
   },
   "files": [
-    "index.js",
+    "lib",
+    "lib-es5",
     "shims"
   ],
   "keywords": [
+    "match",
     "uri",
     "url",
     "relation",
