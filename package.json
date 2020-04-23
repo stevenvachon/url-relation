@@ -17,7 +17,7 @@
     "defined": "^1.0.0",
     "evaluate-value": "^2.0.0",
     "isurl": "^4.0.1",
-    "parse-domain": "^2.1.7",
+    "parse-domain": "^3.0.0",
     "symbol.prototype.description": "^1.0.0"
   },
   "devDependencies": {
