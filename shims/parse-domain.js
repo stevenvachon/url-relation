@@ -1,7 +1,16 @@
 "use strict";
 
 // Browser shim
-module.exports = function()
+module.exports =
 {
-	return null;
+	parseDomain: function()
+	{
+		return {
+			type: this.ParseResultType.Invalid
+		};
+	},
+	ParseResultType:
+	{
+		Invalid: "INVALID"
+	}
 };

@@ -4,7 +4,6 @@ const customizeURL = require("incomplete-url");
 const {describe, it} = require("mocha");
 const {expect} = require("chai");
 const tests = require("./helpers/tests.json");
-const {URL} = require("universal-url");
 const URLRelation = require("../lib");
 
 
@@ -31,7 +30,7 @@ const all = (url1, url2, component) =>
 
 const allMatch = (url1, url2, options) =>
 {
-	const {componentIndex, relatedParts, unrelatedParts} = all(url1, url2, options.targetComponent);
+	const {relatedParts, unrelatedParts} = all(url1, url2, options.targetComponent);
 
 	const relatedPartsMatch = relatedParts.every(component => URLRelation.match(url1, url2, options));
 	const unrelatedPartsMatch = unrelatedParts.every(component => !URLRelation.match(url1, url2, options));
@@ -43,7 +42,7 @@ const allMatch = (url1, url2, options) =>
 
 const allUpTo = (url1, url2, options, component, ignoreComponents) =>
 {
-	const {componentIndex, relatedParts, unrelatedParts} = all(url1, url2, component);
+	const {relatedParts, unrelatedParts} = all(url1, url2, component);
 
 	const instance = new URLRelation(url1, url2, options);
 
@@ -116,7 +115,7 @@ const options = overrides =>
 	ignoreWWW: false,
 	indexFilenames: [],
 	queryNames: [],
-	targetComponent: null,
+	targetComponent: "hash",  // intentionally not a Symbol
 	...overrides
 });
 

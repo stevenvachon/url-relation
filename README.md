@@ -1,23 +1,17 @@
 # url-relation [![NPM Version][npm-image]][npm-url] ![File Size][filesize-image] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependency Monitor][greenkeeper-image]][greenkeeper-url]
 
-> Determine the relation between two [`URL`](https://developer.mozilla.org/en/docs/Web/API/URL)s.
+> Determine the relation between two [`URL`](https://mdn.io/URL)s.
 
 
 ## Installation
 
-[Node.js](http://nodejs.org) `>= 8` is required. To install, type this at the command line:
+[Node.js](https://nodejs.org) `>= 14` is required. To install, type this at the command line:
 ```shell
 npm install url-relation
 ```
 
 
-## Constructor
-```js
-new URLRelation(url1, url2[, options]);
-```
-
-
-## Methods & Functions
+## Usage
 
 ### `URLRelation.match(url1, url2[, options])`
 ```js
@@ -151,12 +145,12 @@ const options = {
 An example of checking for a trusted hostname:
 ```js
 const dynamicProfile = (url1, url2) => {
-  const trustedHosts = ['domain.com'];
+  const trustedHostnames = ['domain.com'];
 
-  const isTrusted = trustedHosts
-    .reduce((results, trustedHost) => {
-      results[0] = results[0] || url1.hostname.endsWith(trustedHost);
-      results[1] = results[1] || url2.hostname.endsWith(trustedHost);
+  const isTrusted = trustedHostnames
+    .reduce((results, trustedHostname) => {
+      results[0] = results[0] || url1.hostname.endsWith(trustedHostname);
+      results[1] = results[1] || url2.hostname.endsWith(trustedHostname);
       return results;
     }, [false,false])
     .every(result => result);
@@ -189,9 +183,9 @@ const custom = extend(true, {}, URLRelation.COMMON_PROFILE, { indexFilenames:['i
 ## URL Components
 
 ```
-               AUTH                  HOST                        PATH
-              __|__                ___|___                 _______|______
-             /     \              /       \               /              \
+               AUTH                  HOST                       PATH
+              __|__                ___|___                 ______|______
+             /     \              /       \               /             \
         USERNAME PASSWORD     HOSTNAME    PORT        PATHNAME        SEARCH  HASH
          ___|__   __|___   ______|______   |   __________|_________   ___|___   |
         /      \ /      \ /             \ / \ /                    \ /       \ / \
@@ -221,10 +215,14 @@ The components of URLs are compared in the following order:
 * `PATH`
 * `HASH`
 
-As you may have noticed, there are a few breaks in linearity:
+As you may have noticed, there are a few **breaks in linearity**:
 
 * `TLD` is prioritized *before* `DOMAIN` because matching a domain on a different top-level domain is very uncommon (but still possible via [`ignoreComponents`](#ignorecomponents)).
 * `SUBDOMAIN` is prioritized *after* `DOMAIN`.
+
+Other considerations:
+
+* URLs with [invalid domain names](https://tools.ietf.org/html/rfc1034), [reserved domains](https://npmjs.com/parse-domain#-reserved-domains), [unlisted TLDs](https://publicsuffix.org/) or IP addresses that have been determined to have related `HOSTNAME` components will also have related `TLD`, `DOMAIN` and `SUBDOMAIN` components due to the above mentioned comparison order *only*; not because they actually *have* those components.
 
 
 ## Browserify/etc
@@ -234,7 +232,7 @@ Due to extreme file size in correctly parsing domains, browser builds will not i
 
 [npm-image]: https://img.shields.io/npm/v/url-relation.svg
 [npm-url]: https://npmjs.org/package/url-relation
-[filesize-image]: https://img.shields.io/badge/size-12.5kB%20gzipped-blue.svg
+[filesize-image]: https://img.shields.io/badge/size-16.4kB%20gzip%20bundle-blue.svg
 [travis-image]: https://img.shields.io/travis/stevenvachon/url-relation.svg
 [travis-url]: https://travis-ci.org/stevenvachon/url-relation
 [coveralls-image]: https://img.shields.io/coveralls/stevenvachon/url-relation.svg

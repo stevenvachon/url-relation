@@ -79,7 +79,11 @@ const urls =
 	"http://user:pass@www.domain.com:80/test//tes.ter/./../index.html?va r1= +dir&var2=text&var2=text2&var3#anchor",
 	"http://user:pass@www.domain.com:80/test//tes.ter/./../index.html?var2=text&va r1= +dir&var3&var2=text2#anchor",
 	"http://user:pass@www.domain.com:80//",
-	"http://user:pass@www.domain.com:80///test/"
+	"http://user:pass@www.domain.com:80///test/",
+	"http://user:pass@com:80/test//tes.ter/./../index.html?va r1= +dir&var2=text&var3#anchor",
+	"http://user:pass@localhost:80/test//tes.ter/./../index.html?va r1= +dir&var2=text&var3#anchor",
+	"http://user:pass@127.0.0.1:80/test//tes.ter/./../index.html?va r1= +dir&var2=text&var3#anchor",
+	"other://domain/"
 ];
 
 
