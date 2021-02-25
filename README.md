@@ -225,14 +225,9 @@ Other considerations:
 * URLs with [invalid domain names](https://tools.ietf.org/html/rfc1034), [reserved domains](https://npmjs.com/parse-domain#-reserved-domains), [unlisted TLDs](https://publicsuffix.org/) or IP addresses that have been determined to have related `HOSTNAME` components will also have related `TLD`, `DOMAIN` and `SUBDOMAIN` components due to the above mentioned comparison order *only*; not because they actually *have* those components.
 
 
-## Browserify/etc
-
-Due to extreme file size in correctly parsing domains, browser builds will not include such functionality by default. While not always accurate, relations of `TLD`, `DOMAIN` and `SUBDOMAIN` will simply reflect that of `HOSTNAME`.
-
-
 [npm-image]: https://img.shields.io/npm/v/url-relation.svg
 [npm-url]: https://npmjs.org/package/url-relation
-[filesize-image]: https://img.shields.io/badge/size-16.4kB%20gzip%20bundle-blue.svg
+[filesize-image]: https://img.shields.io/badge/bundle-53kB%20gzipped-blue.svg
 [travis-image]: https://img.shields.io/travis/stevenvachon/url-relation.svg
 [travis-url]: https://travis-ci.org/stevenvachon/url-relation
 [coveralls-image]: https://img.shields.io/coveralls/stevenvachon/url-relation.svg
