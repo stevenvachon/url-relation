@@ -1,28 +1,18 @@
-"use strict";
-// @todo try https://npmjs.com/json-preserve-indent ?
-const newData = require("./tests.json");
-const orgData = require("./tests-bak.json");
+import newData from './tests.json' with { type: 'json' };
+import orgData from './tests-bak.json' with { type: 'json' };
+import { writeFileSync } from 'fs';
 
-for (let i=0; i<newData.length; i++)
-{
-  const newDatum = newData[i];
-
-  for (let j=0; j<orgData.length; j++)
-  {
-    const orgDatum = orgData[j];
-
-    if (orgDatum.url1!==newDatum.url1 || orgDatum.url2!==newDatum.url2)
-    {
+for (const newDatum of newData) {
+  for (const orgDatum of orgData) {
+    if (orgDatum.url1 !== newDatum.url1 || orgDatum.url2 !== newDatum.url2) {
       continue;
     }
-
     newDatum.relation = orgDatum.relation;
-
     break;
   }
 }
 
-require("fs").writeFileSync(
-  `${__dirname}/tests.json`,
-  JSON.stringify(newData, null, "\t") + "\n"
+writeFileSync(
+  `${import.meta.dirname}/tests.json`,
+  `${JSON.stringify(newData, null, '\t')}\n` // Extra line break for unix/git
 );
